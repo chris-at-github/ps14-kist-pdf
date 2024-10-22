@@ -1,0 +1,32 @@
+{
+	"name": "ps14/kist-pdf",
+	"type": "typo3-cms-extension",
+	"description": "Prints the current url as a PDF",
+	"keywords": [
+		"TYPO3",
+		"extension"
+	],
+	"homepage": "http://ps14.de/",
+	"require": {
+		"typo3/cms-core": "^12.4"
+	},
+	"suggest": {
+	},
+	"autoload": {
+		"psr-4": {
+			"Ps14\\KistPdf\\": "Classes"
+		}
+	},
+	"license": "closed",
+	"authors": [
+		{
+			"name": "Christian Pschorr",
+			"email": "pschorr.christian@gmail.com"
+		}
+	],
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "ps14_kist_pdf"
+		}
+	}
+}
