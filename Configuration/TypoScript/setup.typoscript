@@ -1,4 +1,4 @@
-kistPdf = PAGE
-kistPdf {
-
+pdfGenerate < page
+pdfGenerate {
+	typeNum = 8080
 }

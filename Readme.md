@@ -1,8 +1,8 @@
 # Ps14 Kist PDF
 
 ## Todo`s
-- [ ] fehlerfreie Installation der Extension
-- [ ] Registrierung und Erstellung Middleware und Auslieferung eines Beispiel-Codes
+- [x] fehlerfreie Installation der Extension
+- [x] Registrierung und Erstellung Middleware und Auslieferung eines Beispiel-Codes
 - [ ] Implementierung DemoProviderService 
 - [ ] Implementierung FileProviderService 
   - [ ] Einlesen einer Beispiel PDF und Ausgabe dieser PDF
