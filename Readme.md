@@ -1,5 +1,10 @@
 # Ps14 Kist PDF
 
+## Installation
+1. Per ddev ssh auf Dateiebene wechseln (nur in ddev)
+2. Ins Root-Verzeichnis der Extension wechseln
+3. Package direkt installieren: composer install --working-dir=/var/www/html/public/typo3conf/ext/ps14_kist_pdf
+
 ## Todo`s
 - [x] fehlerfreie Installation der Extension
 - [x] Registrierung und Erstellung Middleware und Auslieferung eines Beispiel-Codes

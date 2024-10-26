@@ -8,13 +8,24 @@
 	],
 	"homepage": "http://ps14.de/",
 	"require": {
-		"typo3/cms-core": "^12.4"
+		"cloudconvert/cloudconvert-php": "^3.4",
+		"symfony/http-client": "^7.1",
+		"nyholm/psr7": "^1.8"
 	},
 	"suggest": {
 	},
 	"autoload": {
 		"psr-4": {
-			"Ps14\\KistPdf\\": "Classes"
+			"Ps14\\KistPdf\\": "Classes",
+			"CloudConvert\\": "Vendor/cloudconvert/cloudconvert-php"
+		}
+	},
+	"config": {
+		"vendor-dir": "Vendor",
+		"allow-plugins": {
+			"php-http/discovery": true,
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true
 		}
 	},
 	"license": "closed",

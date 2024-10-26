@@ -46,8 +46,8 @@ class PdfRequest implements MiddlewareInterface {
 
 		$fileContent = $this->requestService->handle($request, $response);
 
-//	return $this->responseFactory->createResponse()
-//		->withBody($this->streamFactory->createStream('PDF TEST'));
+	return $this->responseFactory->createResponse()
+		->withBody($this->streamFactory->createStream('PDF TEST'));
 // Fehler abfangen
 // throw new \TYPO3\CMS\Core\Exception\SiteNotFoundException('Die Datei wurde nicht gefunden.');
 

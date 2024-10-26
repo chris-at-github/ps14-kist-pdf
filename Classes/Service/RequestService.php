@@ -40,21 +40,14 @@ class RequestService {
 		/** @var CacheService $cacheService */
 		$cacheService = GeneralUtility::makeInstance(CacheService::class, $request, $response);
 
+		/** @var ConvertService $convertService */
+		$convertService = GeneralUtility::makeInstance(ConvertService::class, $request, $response);
+
 		if($cacheService->has() === true) {
 			$fileContent = $cacheService->get();
 
 		} else {
-			$requestTarget = 'https://www.christian-pschorr.de/TAIFUN-CLEAN-015-KIST-ESCHERICH.pdf';
-			$requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-
-			try {
-				$response = $requestFactory->request($requestTarget);
-
-			} catch (RequestException $exception) {
-				return null;
-			}
-
-			$fileContent = $response->getBody()->getContents();
+			$fileContent = $convertService->convert();
 			$cacheService->set($fileContent);
 		}
 

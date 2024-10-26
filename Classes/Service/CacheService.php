@@ -42,6 +42,8 @@ class CacheService {
 	}
 
 	public function has() : bool {
+		return false;
+
 		$cachedResponseHash = $this->cache->get($this->getCacheKey());
 
 		// noch kein Cache-Eintrag
