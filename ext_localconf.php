@@ -4,16 +4,8 @@ if(defined('TYPO3') === false) {
 	die('Access denied.');
 }
 
-//(function () {
-//
-//	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-//		'Ps14KistPdf',
-//		'Pdf',
-//		[
-//			\Ps14\KistPdf\Controller\PdfController::class => 'generate, provide'
-//		],
-//		[
-//			\Ps14\KistPdf\Controller\PdfController::class => 'generate, provide'
-//		]
-//	);
-//})();
+if(isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['ps14_pdf_hash']) === false) {
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['ps14_pdf_hash'] = [
+		'frontend' => \Ps14\KistPdf\Cache\Frontend\VariableFrontend::class,
+	];
+}

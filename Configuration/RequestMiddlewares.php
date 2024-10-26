@@ -1,11 +1,9 @@
 <?php
 
-use Ps14\KistPdf\Middleware\PdfGenerate;
-
 return [
 	'frontend' => [
 		'ps14/kist-pdf/generate' => [
-			'target' => PdfGenerate::class,
+			'target' => \Ps14\KistPdf\Middleware\PdfRequest::class,
 			'before' => [
 				'typo3/cms-adminpanel/renderer',
 			],

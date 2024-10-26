@@ -4,5 +4,10 @@ services:
     autoconfigure: true
     public: false
 
+  cache.ps14_pdf_hash:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['ps14_pdf_hash']
+
   Ps14\KistPdf\:
     resource: '../Classes/*'
