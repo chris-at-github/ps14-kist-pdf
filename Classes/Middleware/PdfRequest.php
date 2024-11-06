@@ -46,10 +46,8 @@ class PdfRequest implements MiddlewareInterface {
 
 		$fileContent = $this->requestService->handle($request, $response);
 
-	return $this->responseFactory->createResponse()
-		->withBody($this->streamFactory->createStream('PDF TEST'));
-// Fehler abfangen
-// throw new \TYPO3\CMS\Core\Exception\SiteNotFoundException('Die Datei wurde nicht gefunden.');
+//		return $this->responseFactory->createResponse()
+//			->withBody($this->streamFactory->createStream('PDF TEST'));
 
 		return $this->responseFactory->createResponse()
 			->withHeader('Content-Type', 'application/pdf')
@@ -57,6 +55,9 @@ class PdfRequest implements MiddlewareInterface {
 			->withHeader('Content-Transfer-Encoding', 'binary')
 			->withHeader('Content-Length', (string) $fileContent['size'])
 			->withHeader('Link', '<' . $fileContent['canonical'] . '>; rel="canonical"')
+			->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+			->withHeader('Pragma', 'no-cache')
+			->withHeader('Expires', '0')
 			->withBody($this->streamFactory->createStream($fileContent['content']));
 	}
 }

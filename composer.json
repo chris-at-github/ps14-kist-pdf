@@ -16,8 +16,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Ps14\\KistPdf\\": "Classes",
-			"CloudConvert\\": "Vendor/cloudconvert/cloudconvert-php"
+			"Ps14\\KistPdf\\": "Classes"
 		}
 	},
 	"config": {

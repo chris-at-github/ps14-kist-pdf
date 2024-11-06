@@ -12,11 +12,12 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 class CacheService {
 
 	public const CACHE_DIRECTORY = '/cache/data/pdf/';
+	public const CACHE_NAME = 'ps14_pdf_hash';
 
 	protected FrontendInterface $cache;
 
 	public function __construct(protected ServerRequestInterface $request, protected ResponseInterface $response) {
-		$this->cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('ps14_pdf_hash');
+		$this->cache = GeneralUtility::makeInstance(CacheManager::class)->getCache(self::CACHE_NAME);
 	}
 
 	protected function getCacheKey() : string {
@@ -42,8 +43,6 @@ class CacheService {
 	}
 
 	public function has() : bool {
-		return false;
-
 		$cachedResponseHash = $this->cache->get($this->getCacheKey());
 
 		// noch kein Cache-Eintrag

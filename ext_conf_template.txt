@@ -1,0 +1,5 @@
+# cat=basic//; type=string; label=API Key of Cloudconvert
+cloudconvertApiKey=
+
+# cat=basic//; type=string; label=Optional base domain for website requests
+cloudconvertBaseDomain=

@@ -7,12 +7,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class RequestService {
-
-//	public function __construct(
-//		private CacheService $cacheService
-//	) {}
 
 	/**
 	 * @param ServerRequestInterface $request
