@@ -60,6 +60,7 @@ class ConvertService {
 						->set('wait_until', 'load')
 						->set('wait_time', 250)
 						->set('margin_top', 10)
+						->set('margin_bottom', 10)
 				)
 				->addTask(
 					(new Task('export/url', 'export-kist'))
