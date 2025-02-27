@@ -39,8 +39,9 @@ class PdfRequest implements MiddlewareInterface {
 
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 		$response = $handler->handle($request);
+		$params = $request->getQueryParams();
 
-		if((int) $request->getQueryParams()['type'] !== 8080) {
+		if(isset($params['type']) === false || (int) $params['type'] !== 8080) {
 			return $response;
 		}
 
