@@ -81,6 +81,6 @@ class CacheService {
 		file_put_contents($this->getCachePath(), $fileContent);
 
 		// Cache Flag setzen
-		$this->cache->set($this->getCacheKey(), $this->getResponseHash());
+		$this->cache->set($this->getCacheKey(), $this->getResponseHash(), [], 63072000);
 	}
 }
