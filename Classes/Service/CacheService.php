@@ -4,8 +4,10 @@ namespace Ps14\KistPdf\Service;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
@@ -15,9 +17,11 @@ class CacheService {
 	public const CACHE_NAME = 'ps14_pdf_hash';
 
 	protected FrontendInterface $cache;
+	private LoggerInterface $logger;
 
 	public function __construct(protected ServerRequestInterface $request, protected ResponseInterface $response) {
 		$this->cache = GeneralUtility::makeInstance(CacheManager::class)->getCache(self::CACHE_NAME);
+		$this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger('Ps14KistPdf');
 	}
 
 	protected function getCacheKey() : string {
@@ -43,24 +47,28 @@ class CacheService {
 	}
 
 	public function has() : bool {
+		$this->logger->debug($this->getCacheKey() . ': new caching request for ' . $this->request->getUri()->getScheme() . $this->request->getUri()->getHost() . $this->request->getUri()->getPath());
 		$cachedResponseHash = $this->cache->get($this->getCacheKey());
 
 		// noch kein Cache-Eintrag
 		if($cachedResponseHash === false) {
-			return false;
+			$this->logger->debug($this->getCacheKey() . ': no cached response hash');
+//			return false;
 		}
 
 		// Seiten-Hash hat sich geaendert
 		if($cachedResponseHash !== $this->getResponseHash()) {
-			if(is_file($this->getCachePath()) === true) {
-				unlink($this->getCachePath());
-			}
-
-			return false;
+			$this->logger->debug($this->getCacheKey() . ': cached response hash is different to current response hash ' . $this->getResponseHash());
+//			if(is_file($this->getCachePath()) === true) {
+//				unlink($this->getCachePath());
+//			}
+//
+//			return false;
 		}
 
 		// Gecachte PDF-Datei nicht mehr vorhanden
 		if(is_file($this->getCachePath()) === false) {
+			$this->logger->debug($this->getCacheKey() . ': no cached file found in ' . $this->getCachePath());
 			return false;
 		}
 
@@ -76,6 +84,8 @@ class CacheService {
 	}
 
 	public function set($fileContent) : void {
+
+		$this->logger->debug($this->getCacheKey() . ': write new cache with response hash ' . $this->getResponseHash());
 
 		// Datei abgespeichern
 		file_put_contents($this->getCachePath(), $fileContent);
