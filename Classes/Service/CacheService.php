@@ -43,7 +43,15 @@ class CacheService {
 	}
 
 	protected function getResponseHash() : string {
-		return md5($this->response->getBody()->__toString());
+		$html = $this->response->getBody()->__toString();
+		$main = '';
+
+		if(preg_match('/<main\b[^>]*>(.*?)<\/main>/is', $html, $matches)) {
+			$main = trim($matches[1]);
+			$main = preg_replace('/\s+/', ' ', $main); // Optional: Whitespace normalisieren, um Unterschiede durch Formatierung zu minimieren
+		}
+
+		return md5($main);
 	}
 
 	public function has() : bool {
@@ -58,12 +66,14 @@ class CacheService {
 
 		// Seiten-Hash hat sich geaendert
 		if($cachedResponseHash !== $this->getResponseHash()) {
-			$this->logger->debug($this->getCacheKey() . ': cached response hash is different to current response hash ' . $this->getResponseHash());
+			$this->logger->debug($this->getCacheKey() . ': cached response hash: ' . $cachedResponseHash . ' is different to current response hash ' . $this->getResponseHash());
 //			if(is_file($this->getCachePath()) === true) {
 //				unlink($this->getCachePath());
 //			}
 //
 //			return false;
+		} else {
+			$this->logger->debug($this->getCacheKey() . ': cached response hash is same to current response hash ' . $this->getResponseHash());
 		}
 
 		// Gecachte PDF-Datei nicht mehr vorhanden
