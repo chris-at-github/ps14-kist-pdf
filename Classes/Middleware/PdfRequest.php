@@ -26,8 +26,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class PdfRequest implements MiddlewareInterface {
 
@@ -45,6 +47,10 @@ class PdfRequest implements MiddlewareInterface {
 			return $response;
 		}
 
+		if($this->isPageEnabled($request) === false) {
+			return new RedirectResponse($request->getUri()->getPath(), 307);
+		}
+
 		$fileContent = $this->requestService->handle($request, $response);
 
 //		return $this->responseFactory->createResponse()
@@ -60,5 +66,31 @@ class PdfRequest implements MiddlewareInterface {
 			->withHeader('Pragma', 'no-cache')
 			->withHeader('Expires', '0')
 			->withBody($this->streamFactory->createStream($fileContent['content']));
+	}
+
+	public function isPageEnabled(ServerRequestInterface $request) : bool {
+		$pageArguments = $request->getAttribute('routing');
+
+		if(($pageArguments instanceof PageArguments) === false) {
+			return false;
+		}
+
+		// Seitendatensatz aus DB laden (Doctrine)
+		$connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
+		$page = $connection->select(
+			['tx_site_disable_sticky_pdf'],
+			'pages',
+			['uid' => (int) $pageArguments->getPageId()]
+		)->fetchAssociative();
+
+		if($page === false) {
+			return false;
+		}
+
+		if((int) $page['tx_site_disable_sticky_pdf'] === 1) {
+			return false;
+		}
+
+		return true;
 	}
 }

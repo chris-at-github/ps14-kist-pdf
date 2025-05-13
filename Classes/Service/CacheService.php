@@ -55,31 +55,38 @@ class CacheService {
 	}
 
 	public function has() : bool {
-		$this->logger->debug($this->getCacheKey() . ': new caching request for ' . $this->request->getUri()->getScheme() . $this->request->getUri()->getHost() . $this->request->getUri()->getPath());
 		$cachedResponseHash = $this->cache->get($this->getCacheKey());
 
 		// noch kein Cache-Eintrag
 		if($cachedResponseHash === false) {
+			$this->logger->debug($this->getCacheKey() . ': caching request for ' . $this->request->getUri()->getScheme() . $this->request->getUri()->getHost() . $this->request->getUri()->getPath());
 			$this->logger->debug($this->getCacheKey() . ': no cached response hash');
 //			return false;
 		}
 
 		// Seiten-Hash hat sich geaendert
 		if($cachedResponseHash !== $this->getResponseHash()) {
-			$this->logger->debug($this->getCacheKey() . ': cached response hash: ' . $cachedResponseHash . ' is different to current response hash ' . $this->getResponseHash());
+			$this->logger->debug($this->getCacheKey() . ': caching request for ' . $this->request->getUri()->getScheme() . $this->request->getUri()->getHost() . $this->request->getUri()->getPath());
+			$this->logger->debug($this->getCacheKey() . ': cached response hash: "' . $cachedResponseHash . '" is different to current response hash ' . $this->getResponseHash());
 //			if(is_file($this->getCachePath()) === true) {
 //				unlink($this->getCachePath());
 //			}
 //
 //			return false;
-		} else {
-			$this->logger->debug($this->getCacheKey() . ': cached response hash is same to current response hash ' . $this->getResponseHash());
 		}
 
 		// Gecachte PDF-Datei nicht mehr vorhanden
 		if(is_file($this->getCachePath()) === false) {
-			$this->logger->debug($this->getCacheKey() . ': no cached file found in ' . $this->getCachePath());
+			$this->logger->debug($this->getCacheKey() . ': caching request for ' . $this->request->getUri()->getScheme() . $this->request->getUri()->getHost() . $this->request->getUri()->getPath());
+			$this->logger->debug($this->getCacheKey() . ': no cached file found for ' . $this->getCachePath());
+
 			return false;
+		}
+
+		// gecachte PDF Datei ist kleiner als 100kb
+		if(filesize($this->getCachePath()) < 100 * 1024) { // 100 KB = 102400 bytes
+			$this->logger->debug($this->getCacheKey() . ': caching request for ' . $this->request->getUri()->getScheme() . $this->request->getUri()->getHost() . $this->request->getUri()->getPath());
+			$this->logger->debug($this->getCacheKey() . ': cached file "' . $this->getCachePath() . '" is smaller than 100kb');
 		}
 
 		return true;
@@ -94,8 +101,6 @@ class CacheService {
 	}
 
 	public function set($fileContent) : void {
-
-		$this->logger->debug($this->getCacheKey() . ': write new cache with response hash ' . $this->getResponseHash());
 
 		// Datei abgespeichern
 		file_put_contents($this->getCachePath(), $fileContent);

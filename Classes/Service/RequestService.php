@@ -42,7 +42,6 @@ class RequestService {
 
 		if($cacheService->has() === true) {
 			$fileContent = $cacheService->get();
-			$cacheService->set($fileContent);
 
 		} else {
 			$fileContent = $convertService->convert();
